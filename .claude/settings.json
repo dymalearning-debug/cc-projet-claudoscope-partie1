@@ -1,5 +1,8 @@
 {
   "$schema": "https://json.schemastore.org/claude-code-settings.json",
+  "sandbox": {
+    "enabled": true
+  },
   "permissions": {
     "allow": [
       "Bash(pnpm install)",
@@ -82,6 +85,30 @@
       "PowerShell(git push *)"
     ],
     "deny": [
+      "WebFetch",
+      "WebSearch",
+      "Bash(curl)",
+      "Bash(curl *)",
+      "Bash(curl.exe *)",
+      "Bash(wget)",
+      "Bash(wget *)",
+      "Bash(wget.exe *)",
+      "Bash(Invoke-WebRequest *)",
+      "Bash(Invoke-RestMethod *)",
+      "Bash(iwr *)",
+      "Bash(irm *)",
+      "Bash(Start-BitsTransfer *)",
+      "PowerShell(curl)",
+      "PowerShell(curl *)",
+      "PowerShell(curl.exe *)",
+      "PowerShell(wget)",
+      "PowerShell(wget *)",
+      "PowerShell(wget.exe *)",
+      "PowerShell(Invoke-WebRequest *)",
+      "PowerShell(Invoke-RestMethod *)",
+      "PowerShell(iwr *)",
+      "PowerShell(irm *)",
+      "PowerShell(Start-BitsTransfer *)",
       "Read(.env)",
       "Read(.env.*)",
       "Read(**/.env)",
