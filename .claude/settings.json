@@ -68,7 +68,13 @@
       "PowerShell(git rev-parse *)",
       "PowerShell(git ls-files)",
       "PowerShell(git ls-files *)",
-      "PowerShell(git stash list)"
+      "PowerShell(git stash list)",
+      "WebFetch(domain:github.com)",
+      "WebFetch(domain:*.github.com)",
+      "WebFetch(domain:*.githubusercontent.com)",
+      "WebFetch(domain:npmjs.com)",
+      "WebFetch(domain:www.npmjs.com)",
+      "WebFetch(domain:registry.npmjs.org)"
     ],
     "ask": [
       "Bash(pnpm add *)",
@@ -85,8 +91,6 @@
       "PowerShell(git push *)"
     ],
     "deny": [
-      "WebFetch",
-      "WebSearch",
       "Bash(curl)",
       "Bash(curl *)",
       "Bash(curl.exe *)",
