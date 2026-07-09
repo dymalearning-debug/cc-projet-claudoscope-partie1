@@ -5,8 +5,8 @@ Voir [design-doc.md](./design-doc.md) pour le contexte, les objectifs et l'archi
 
 Ce dépôt est un monorepo pnpm :
 
-- `packages/core` (`@claudoscope/core`) — moteur pur, zéro I/O : contenus en mémoire → `Finding[]`.
-- `packages/cli` (`claudoscope`) — la surface CLI, seule destinée à la publication.
+- `packages/core` (`@claudoscope/core`) — moteur pur, zéro I/O : contenus en mémoire → `Finding[]`. Publié comme dépendance des surfaces.
+- `packages/cli` (`claudoscope`) — la surface CLI, publiée comme exécutable installable.
 
 > État actuel : **socle technique uniquement**. Aucune règle d'audit n'est encore implémentée.
 

@@ -12,8 +12,8 @@ Le comportement d'un agent Claude Code dans un dépôt est encadré par des fich
 - CLI utilisable localement et comme gate CI dès la v1 (exit code par sévérité).
 - v1 limitée aux règles CLAUDE.md, mais pipeline générique (`découverte → analyse → règles → rapport`) dès le premier commit.
 - Publication open source visée (licence MIT), usage interne d'abord.
-  t
-  **Non-objectifs (v1)**
+
+**Non-objectifs (v1)**
 - Pas de jugement LLM, ni socle hybride.
 - Pas d'auto-fix : l'outil est en lecture seule.
 - Pas de fichier de configuration utilisateur : toutes les règles actives avec leur sévérité par défaut.
@@ -31,9 +31,9 @@ Le comportement d'un agent Claude Code dans un dépôt est encadré par des fich
 - `@claudoscope/core` — **pur, zéro I/O** (ni `fs`, ni réseau, ni `process`). Reçoit des contenus en mémoire (`{path, content}`), exécute les règles, retourne des `Finding[]` typés. Modèle de règle : `{id stable, severity, docs 1 ligne, check(ctx) → Finding[]}`.
 - `claudoscope` (CLI) — découverte des fichiers, lecture `fs`, invocation du core, rendu texte/JSON, exit codes.
 
-La frontière est le contrat : toute surface future (Action CI, plugin Claude Code, LSP) consomme `@claudoscope/core` ; le core ne dépend jamais d'une surface. Les deux packages vivent dans le workspace ; seul `claudoscope` est destiné à une publication.
+La frontière est le contrat : toute surface future (Action CI, plugin Claude Code, LSP) consomme `@claudoscope/core` ; le core ne dépend jamais d'une surface. Les deux packages vivent dans le workspace et sont tous deux destinés à une publication : `@claudoscope/core` comme dépendance des surfaces (la CLI aujourd'hui, les autres surfaces ensuite), `claudoscope` comme exécutable installable.
 
-**Première tranche verticale.** `claudoscope scan` sur un dépôt contenant un CLAUDE.md, avec le jeu de règles v1 : longueur totale excessive, section démesurée, contenu dérivable du code (ex. arborescence recopiée), secret en clair. Les seuils sont des constantes du code, ajustables par itération. Deux fixtures (dépôt sain / dépôt fautif), snapshots texte et JSON, exit codes vérifiés.
+**Première tranche verticale.** `claudoscope scan` sur un dépôt contenant un CLAUDE.md, avec le jeu de règles v1 : `MEM001` — fichier trop long, `MEM002` — section vide, `MEM003` — structure minimale absente (au moins une section commandes, architecture ou vérification). Le comportement précis de chaque règle sera spécifié au moment de son implémentation. Les seuils sont des constantes du code, ajustables par itération. Deux fixtures (dépôt sain / dépôt fautif), snapshots texte et JSON, exit codes vérifiés.
 
 ## 4. Alternatives écartées
 
