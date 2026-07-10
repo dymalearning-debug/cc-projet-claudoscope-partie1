@@ -36,7 +36,7 @@ export interface RuleContext {
  * d'une documentation d'une ligne, et pure (`check` ne fait aucune I/O).
  */
 export interface Rule {
-  /** Identifiant stable (ex. `claude-md/length`). */
+  /** Identifiant stable (ex. `MEM001`). */
   readonly id: string;
   readonly severity: Severity;
   /** Documentation d'une ligne décrivant ce que la règle vérifie. */
