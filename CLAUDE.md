@@ -15,7 +15,7 @@ Cette frontière est le contrat central du projet : la dépendance ne va que dan
 pnpm install        # installe et lie les packages du workspace
 pnpm run build      # tsc → packages/*/dist (nécessaire avant d'exécuter la CLI)
 pnpm run typecheck  # tsc --noEmit sur chaque package
-pnpm run test       # vitest run sur tout le monorepo
+pnpm run test       # build puis vitest run (le smoke test E2E exige dist/ à jour)
 pnpm run lint       # eslint sur le monorepo
 pnpm run claudoscope  # exécute la CLI buildée (node packages/cli/dist/index.js)
 ```

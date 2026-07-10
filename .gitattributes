@@ -1,0 +1,3 @@
+# Les fixtures sont des entrées de snapshots : identiques octet par octet
+# sur toute machine (le code tolère CRLF, ceci fige simplement les octets).
+packages/cli/fixtures/** text eol=lf

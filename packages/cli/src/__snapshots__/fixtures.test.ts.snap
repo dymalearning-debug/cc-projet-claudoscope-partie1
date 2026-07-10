@@ -1,0 +1,71 @@
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
+
+exports[`fixture avertissements (warns seuls) > json : les warns rapportés, exit 0 1`] = `
+"{
+  "findings": [
+    {
+      "path": "packages/cli/fixtures/avertissements/CLAUDE.md",
+      "ruleId": "MEM001",
+      "severity": "warn",
+      "message": "Le fichier compte 204 lignes (maximum recommandé : 200).",
+      "line": 201
+    },
+    {
+      "path": "packages/cli/fixtures/avertissements/CLAUDE.md",
+      "ruleId": "MEM002",
+      "severity": "warn",
+      "message": "La section « Notes » est vide.",
+      "line": 204
+    }
+  ]
+}
+"
+`;
+
+exports[`fixture avertissements (warns seuls) > text : les warns s’affichent mais exit 0 par défaut 1`] = `
+"packages/cli/fixtures/avertissements/CLAUDE.md:201 warn MEM001 Le fichier compte 204 lignes (maximum recommandé : 200).
+packages/cli/fixtures/avertissements/CLAUDE.md:204 warn MEM002 La section « Notes » est vide.
+"
+`;
+
+exports[`fixture fautif > json : les trois findings, exit 1 1`] = `
+"{
+  "findings": [
+    {
+      "path": "packages/cli/fixtures/fautif/CLAUDE.md",
+      "ruleId": "MEM001",
+      "severity": "warn",
+      "message": "Le fichier compte 204 lignes (maximum recommandé : 200).",
+      "line": 201
+    },
+    {
+      "path": "packages/cli/fixtures/fautif/CLAUDE.md",
+      "ruleId": "MEM002",
+      "severity": "warn",
+      "message": "La section « Notes » est vide.",
+      "line": 204
+    },
+    {
+      "path": "packages/cli/fixtures/fautif/CLAUDE.md",
+      "ruleId": "MEM003",
+      "severity": "error",
+      "message": "Aucune section commandes, architecture ou vérification trouvée."
+    }
+  ]
+}
+"
+`;
+
+exports[`fixture fautif > text : les trois findings, exit 1 1`] = `
+"packages/cli/fixtures/fautif/CLAUDE.md:201 warn MEM001 Le fichier compte 204 lignes (maximum recommandé : 200).
+packages/cli/fixtures/fautif/CLAUDE.md:204 warn MEM002 La section « Notes » est vide.
+packages/cli/fixtures/fautif/CLAUDE.md error MEM003 Aucune section commandes, architecture ou vérification trouvée.
+"
+`;
+
+exports[`fixture sain > json : findings vides, exit 0 1`] = `
+"{
+  "findings": []
+}
+"
+`;
