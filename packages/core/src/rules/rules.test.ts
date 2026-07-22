@@ -11,6 +11,7 @@ describe('jeu de règles v1', () => {
       'MEM002',
       'MEM003',
       'MEM004',
+      'MEM005',
     ]);
   });
 
@@ -18,7 +19,7 @@ describe('jeu de règles v1', () => {
   // produit les findings attendus, dans l'ordre d'agrégation du moteur.
   it('produit les findings attendus via analyze() sur un contenu fautif', () => {
     const filler = Array.from({ length: MAX_LINES }, () => 'texte').join('\n');
-    const content = `# Intro\n## Vide\n# Suite\n${filler}\n`;
+    const content = `# Intro\n## Vide\n# Suite\n### Saut\n${filler}\n`;
     const findings = analyze(
       [{ path: 'CLAUDE.md', content }],
       rules,
@@ -27,7 +28,7 @@ describe('jeu de règles v1', () => {
       {
         ruleId: 'MEM001',
         severity: 'warn',
-        message: `Le fichier compte 203 lignes (maximum recommandé : ${MAX_LINES}).`,
+        message: `Le fichier compte 204 lignes (maximum recommandé : ${MAX_LINES}).`,
         line: MAX_LINES + 1,
       },
       // « Intro » n'est pas signalée : suivie d'une sous-section plus
@@ -43,6 +44,14 @@ describe('jeu de règles v1', () => {
         severity: 'error',
         message:
           'Aucune section commandes, architecture ou vérification trouvée.',
+      },
+      // « Suite » → « Saut » descend de deux niveaux d'un coup.
+      {
+        ruleId: 'MEM005',
+        severity: 'warn',
+        message:
+          "Le titre « Saut » (niveau 3) saute 2 niveaux depuis « Suite » (niveau 1) ; descendre d'un niveau à la fois.",
+        line: 4,
       },
     ]);
   });

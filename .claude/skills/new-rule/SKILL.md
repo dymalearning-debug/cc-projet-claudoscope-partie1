@@ -1,6 +1,6 @@
 ---
 name: new-rule
-description: Ajoute une nouvelle règle de lint MEM00N à claudoscope en déroulant la procédure complète (règle, test, enregistrement, fixtures, snapshot, dogfooding, vérification). Utiliser dès que l'utilisateur demande d'ajouter, créer ou implémenter une règle de lint (« ajoute une règle », « nouvelle règle MEM004 », « crée une règle qui détecte… »).
+description: Ajoute une nouvelle règle de lint MEM00N à claudoscope en déroulant la procédure complète (règle, test, enregistrement, fixtures, snapshot, dogfooding, vérification). Utiliser dès que l'utilisateur demande d'ajouter, créer ou implémenter une règle de lint (« ajoute une règle », « nouvelle règle MEM004 », « crée une règle qui détecte… »). Utiliser aussi quand l'utilisateur demande de traiter, planifier ou implémenter une issue GitHub qui décrit une règle MEM00N (« récupère l'issue N », « fais un plan pour l'issue N »).
 ---
 
 # new-rule — ajouter une règle de lint à claudoscope
