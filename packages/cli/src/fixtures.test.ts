@@ -32,13 +32,13 @@ describe('fixture sain', () => {
 });
 
 describe('fixture fautif', () => {
-  it('text : les trois findings, exit 1', async () => {
+  it('text : les quatre findings, exit 1', async () => {
     const result = await runScan(FAUTIF, { format: 'text', failOn: 'error' });
     expect(result.exitCode).toBe(1);
     expect(result.output).toMatchSnapshot();
   });
 
-  it('json : les trois findings, exit 1', async () => {
+  it('json : les quatre findings, exit 1', async () => {
     const result = await runScan(FAUTIF, { format: 'json', failOn: 'error' });
     expect(result.exitCode).toBe(1);
     expect(result.output).toMatchSnapshot();

@@ -202,3 +202,7 @@ Entrée 193 : observation consignée pour gonfler le journal.
 Entrée 194 : observation consignée pour gonfler le journal.
 
 ## Notes
+
+## Historique
+
+Section dupliquée : le journal reprend plus bas dans le fichier.
