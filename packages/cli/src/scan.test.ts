@@ -1,7 +1,7 @@
 import { mkdtemp, rm, writeFile } from 'node:fs/promises';
 import { tmpdir } from 'node:os';
 import { join } from 'node:path';
-import { afterAll, beforeAll, describe, it, expect } from 'vitest';
+import { afterAll, afterEach, beforeAll, describe, it, expect, vi } from 'vitest';
 import { runScan } from './scan.js';
 
 /** Fichier sain : sections attendues présentes, aucune vide, taille modeste. */
@@ -79,5 +79,94 @@ describe('runScan', () => {
     await expect(
       runScan(dir, { format: 'text', failOn: 'error' }),
     ).rejects.toThrow();
+  });
+});
+
+describe('runScan distant', () => {
+  const URL_REPO = 'https://github.com/owner/repo';
+  const LABEL = 'owner/repo/CLAUDE.md';
+
+  /** Réponse 200 de /contents/ pour un contenu markdown donné. */
+  const contentsOk = (markdown: string): Response =>
+    new Response(
+      JSON.stringify({
+        type: 'file',
+        content: Buffer.from(markdown, 'utf8').toString('base64'),
+      }),
+      { status: 200 },
+    );
+
+  const stubFetch = (...responses: Response[]): ReturnType<typeof vi.fn> => {
+    const mock = vi.fn();
+    for (const response of responses) {
+      mock.mockResolvedValueOnce(response);
+    }
+    vi.stubGlobal('fetch', mock);
+    return mock;
+  };
+
+  afterEach(() => {
+    vi.unstubAllGlobals();
+  });
+
+  it('contenu fautif : findings préfixés owner/repo/CLAUDE.md et exit 1', async () => {
+    stubFetch(contentsOk(FAUTIF));
+    const result = await runScan(URL_REPO, { format: 'text', failOn: 'error' });
+    expect(result.exitCode).toBe(1);
+    expect(result.output).toBe(
+      `${LABEL}:3 warn MEM002 La section « Vide » est vide.\n` +
+        `${LABEL} error MEM003 Aucune section commandes, architecture ou vérification trouvée.\n`,
+    );
+  });
+
+  it('contenu fautif : --format json porte le label distant en path', async () => {
+    stubFetch(contentsOk(FAUTIF));
+    const result = await runScan(URL_REPO, { format: 'json', failOn: 'error' });
+    const parsed = JSON.parse(result.output) as {
+      findings: { path: string }[];
+    };
+    expect(parsed.findings.length).toBeGreaterThan(0);
+    expect(parsed.findings.every((f) => f.path === LABEL)).toBe(true);
+    expect(result.exitCode).toBe(1);
+  });
+
+  it('des warn seuls ne font échouer qu’avec --fail-on warn', async () => {
+    stubFetch(contentsOk(WARN_SEUL));
+    const surError = await runScan(URL_REPO, {
+      format: 'text',
+      failOn: 'error',
+    });
+    expect(surError.exitCode).toBe(0);
+    stubFetch(contentsOk(WARN_SEUL));
+    const surWarn = await runScan(URL_REPO, { format: 'text', failOn: 'warn' });
+    expect(surWarn.exitCode).toBe(1);
+  });
+
+  it('CLAUDE.md absent : message aligné sur le local et exit 0', async () => {
+    stubFetch(
+      new Response(JSON.stringify({}), { status: 404 }),
+      new Response(JSON.stringify({}), { status: 200 }),
+    );
+    const result = await runScan(URL_REPO, { format: 'text', failOn: 'error' });
+    expect(result).toEqual({
+      output: `aucun fichier traité : ${LABEL} introuvable\n`,
+      exitCode: 0,
+    });
+  });
+
+  it('dépôt inaccessible : remonte (exit 2 via le catch global)', async () => {
+    stubFetch(
+      new Response(JSON.stringify({}), { status: 404 }),
+      new Response(JSON.stringify({}), { status: 404 }),
+    );
+    await expect(
+      runScan(URL_REPO, { format: 'text', failOn: 'error' }),
+    ).rejects.toThrow(/inaccessible ou privé/);
+  });
+
+  it('un argument non-URL ne déclenche aucun appel réseau', async () => {
+    const mock = stubFetch();
+    await runScan(chemin('sain.md'), { format: 'text', failOn: 'error' });
+    expect(mock).not.toHaveBeenCalled();
   });
 });
