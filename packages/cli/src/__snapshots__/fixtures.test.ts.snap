@@ -7,7 +7,7 @@ exports[`fixture avertissements (warns seuls) > json : les warns rapportés, exi
       "path": "packages/cli/fixtures/avertissements/CLAUDE.md",
       "ruleId": "MEM001",
       "severity": "warn",
-      "message": "Le fichier compte 208 lignes (maximum recommandé : 200).",
+      "message": "Le fichier compte 212 lignes (maximum recommandé : 200).",
       "line": 201
     },
     {
@@ -23,6 +23,13 @@ exports[`fixture avertissements (warns seuls) > json : les warns rapportés, exi
       "severity": "warn",
       "message": "Titre en doublon « Historique » (première occurrence ligne 7).",
       "line": 206
+    },
+    {
+      "path": "packages/cli/fixtures/avertissements/CLAUDE.md",
+      "ruleId": "MEM005",
+      "severity": "warn",
+      "message": "Le titre « Détails » (niveau 4) saute 2 niveaux depuis « Historique » (niveau 2) ; descendre d'un niveau à la fois.",
+      "line": 210
     }
   ]
 }
@@ -30,20 +37,21 @@ exports[`fixture avertissements (warns seuls) > json : les warns rapportés, exi
 `;
 
 exports[`fixture avertissements (warns seuls) > text : les warns s’affichent mais exit 0 par défaut 1`] = `
-"packages/cli/fixtures/avertissements/CLAUDE.md:201 warn MEM001 Le fichier compte 208 lignes (maximum recommandé : 200).
+"packages/cli/fixtures/avertissements/CLAUDE.md:201 warn MEM001 Le fichier compte 212 lignes (maximum recommandé : 200).
 packages/cli/fixtures/avertissements/CLAUDE.md:204 warn MEM002 La section « Notes » est vide.
 packages/cli/fixtures/avertissements/CLAUDE.md:206 warn MEM004 Titre en doublon « Historique » (première occurrence ligne 7).
+packages/cli/fixtures/avertissements/CLAUDE.md:210 warn MEM005 Le titre « Détails » (niveau 4) saute 2 niveaux depuis « Historique » (niveau 2) ; descendre d'un niveau à la fois.
 "
 `;
 
-exports[`fixture fautif > json : les quatre findings, exit 1 1`] = `
+exports[`fixture fautif > json : les cinq findings, exit 1 1`] = `
 "{
   "findings": [
     {
       "path": "packages/cli/fixtures/fautif/CLAUDE.md",
       "ruleId": "MEM001",
       "severity": "warn",
-      "message": "Le fichier compte 208 lignes (maximum recommandé : 200).",
+      "message": "Le fichier compte 212 lignes (maximum recommandé : 200).",
       "line": 201
     },
     {
@@ -65,17 +73,25 @@ exports[`fixture fautif > json : les quatre findings, exit 1 1`] = `
       "severity": "warn",
       "message": "Titre en doublon « Historique » (première occurrence ligne 7).",
       "line": 206
+    },
+    {
+      "path": "packages/cli/fixtures/fautif/CLAUDE.md",
+      "ruleId": "MEM005",
+      "severity": "warn",
+      "message": "Le titre « Détails » (niveau 4) saute 2 niveaux depuis « Historique » (niveau 2) ; descendre d'un niveau à la fois.",
+      "line": 210
     }
   ]
 }
 "
 `;
 
-exports[`fixture fautif > text : les quatre findings, exit 1 1`] = `
-"packages/cli/fixtures/fautif/CLAUDE.md:201 warn MEM001 Le fichier compte 208 lignes (maximum recommandé : 200).
+exports[`fixture fautif > text : les cinq findings, exit 1 1`] = `
+"packages/cli/fixtures/fautif/CLAUDE.md:201 warn MEM001 Le fichier compte 212 lignes (maximum recommandé : 200).
 packages/cli/fixtures/fautif/CLAUDE.md:204 warn MEM002 La section « Notes » est vide.
 packages/cli/fixtures/fautif/CLAUDE.md error MEM003 Aucune section commandes, architecture ou vérification trouvée.
 packages/cli/fixtures/fautif/CLAUDE.md:206 warn MEM004 Titre en doublon « Historique » (première occurrence ligne 7).
+packages/cli/fixtures/fautif/CLAUDE.md:210 warn MEM005 Le titre « Détails » (niveau 4) saute 2 niveaux depuis « Historique » (niveau 2) ; descendre d'un niveau à la fois.
 "
 `;
 

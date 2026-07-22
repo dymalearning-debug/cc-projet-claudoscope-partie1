@@ -206,3 +206,7 @@ Entrée 194 : observation consignée pour gonfler le journal.
 ## Historique
 
 Section dupliquée : le journal reprend plus bas dans le fichier.
+
+#### Détails
+
+Précision reléguée deux niveaux plus bas d'un coup.

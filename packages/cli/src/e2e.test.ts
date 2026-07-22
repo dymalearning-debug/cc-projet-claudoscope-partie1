@@ -50,7 +50,7 @@ describe('binaire claudoscope (E2E)', () => {
   );
 
   it(
-    'fixture fautive en JSON : exit 1 et les quatre règles',
+    'fixture fautive en JSON : exit 1 et les cinq règles',
     async () => {
       const result = await runCli([
         'scan',
@@ -67,6 +67,7 @@ describe('binaire claudoscope (E2E)', () => {
         'MEM002',
         'MEM003',
         'MEM004',
+        'MEM005',
       ]);
     },
     TIMEOUT,
