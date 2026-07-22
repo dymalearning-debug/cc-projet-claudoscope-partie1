@@ -10,6 +10,7 @@ describe('jeu de règles v1', () => {
       'MEM001',
       'MEM002',
       'MEM003',
+      'MEM004',
     ]);
   });
 
