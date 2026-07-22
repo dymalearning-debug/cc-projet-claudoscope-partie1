@@ -37,7 +37,11 @@ export function createProgram(): Command {
   program
     .command('scan')
     .description('Analyse un fichier CLAUDE.md et rapporte les findings')
-    .argument('[fichier]', 'chemin du fichier à analyser', 'CLAUDE.md')
+    .argument(
+      '[fichier]',
+      'chemin du fichier à analyser, ou URL https://github.com/owner/repo',
+      'CLAUDE.md',
+    )
     .option('--format <format>', 'format de sortie (text|json)', 'text')
     .option('--fail-on <severity>', 'seuil d’échec (error|warn)', 'error')
     .action(

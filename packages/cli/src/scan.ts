@@ -1,6 +1,7 @@
 import { readFile } from 'node:fs/promises';
 import { analyze, rules } from '@claudoscope/core';
 import type { Severity } from '@claudoscope/core';
+import { fetchRemoteClaudeMd, parseGitHubUrl } from './remote.js';
 import { renderJson, renderText } from './render.js';
 
 /** Options de `scan`, déjà validées par la couche commander. */
@@ -29,17 +30,50 @@ function isFileNotFound(error: unknown): boolean {
   );
 }
 
+/** Invoque le moteur avec le jeu de règles v1 et produit le rapport. */
+function analyzeContent(
+  label: string,
+  content: string,
+  options: ScanOptions,
+): ScanResult {
+  const findings = analyze([{ path: label, content }], rules);
+  const failing = FAILING_SEVERITIES[options.failOn];
+  return {
+    output:
+      options.format === 'json'
+        ? renderJson(label, findings)
+        : renderText(label, findings),
+    exitCode: findings.some((finding) => failing.includes(finding.severity))
+      ? 1
+      : 0,
+  };
+}
+
 /**
- * Lit le fichier, invoque le moteur avec le jeu de règles v1 et produit le
- * rapport. N'écrit ni sur stdout ni dans `process` : la glue commander s'en
- * charge, ce qui garde toute la logique testable sans forker de process.
- * Les autres erreurs d'I/O (`EISDIR`, `EACCES`…) remontent au catch global
- * de `index.ts` (exit 2).
+ * Obtient le contenu à analyser — fichier local, ou CLAUDE.md distant si
+ * l'argument est une URL GitHub — puis produit le rapport. N'écrit ni sur
+ * stdout ni dans `process` : la glue commander s'en charge, ce qui garde
+ * toute la logique testable sans forker de process. Les autres erreurs
+ * d'I/O (`EISDIR`, `EACCES`…) et les erreurs distantes (dépôt inaccessible,
+ * réseau, rate limit) remontent au catch global de `index.ts` (exit 2).
  */
 export async function runScan(
   fichier: string,
   options: ScanOptions,
 ): Promise<ScanResult> {
+  const target = parseGitHubUrl(fichier);
+  if (target !== undefined) {
+    const label = `${target.owner}/${target.repo}/CLAUDE.md`;
+    const remote = await fetchRemoteClaudeMd(target);
+    if (remote.kind === 'not-found') {
+      return {
+        output: `aucun fichier traité : ${label} introuvable\n`,
+        exitCode: 0,
+      };
+    }
+    return analyzeContent(label, remote.content, options);
+  }
+
   let content: string;
   try {
     content = await readFile(fichier, 'utf8');
@@ -53,15 +87,5 @@ export async function runScan(
     throw error;
   }
 
-  const findings = analyze([{ path: fichier, content }], rules);
-  const failing = FAILING_SEVERITIES[options.failOn];
-  return {
-    output:
-      options.format === 'json'
-        ? renderJson(fichier, findings)
-        : renderText(fichier, findings),
-    exitCode: findings.some((finding) => failing.includes(finding.severity))
-      ? 1
-      : 0,
-  };
+  return analyzeContent(fichier, content, options);
 }
